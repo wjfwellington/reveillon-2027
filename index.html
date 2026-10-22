@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111c34">
+  <meta name="description" content="A contagem regressiva para nosso encontro em família em 30 de dezembro de 2026. Vem, 2027!">
+  <title>Vem, 2027! • Nosso encontro em família</title>
+  <style>
+    :root{color-scheme:dark;--gold:#edcd8b;--muted:#bec6d6}
+    *{box-sizing:border-box}body{margin:0;background:#101a30;color:#faf6ed;font-family:Arial,Helvetica,sans-serif;min-height:100svh;overflow-x:hidden}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 30%,#30426466,transparent 65%),radial-gradient(circle at 8% 12%,#edcd8b08,transparent 30%)}
+    .stars{position:fixed;inset:0;pointer-events:none;overflow:hidden}.star{position:absolute;background:var(--gold);border-radius:50%;opacity:.45}
+    main{position:relative;max-width:1000px;margin:auto;text-align:center;padding:42px 24px 30px;min-height:100svh;display:flex;align-items:center;flex-direction:column;justify-content:center}
+    .eyebrow{text-transform:uppercase;letter-spacing:.28em;font-size:11px;color:var(--gold);margin:0 0 34px}.spark{font-size:28px;color:var(--gold);margin-bottom:22px}
+    h1{font:normal clamp(64px,12vw,122px)/.95 Georgia,serif;letter-spacing:-.06em;margin:0}h1 em{font-weight:normal;color:var(--gold)}
+    .intro{font:normal clamp(20px,3vw,26px)/1.5 Georgia,serif;margin:24px 0 10px}.sub{font-size:14px;line-height:1.7;color:var(--muted);margin:0;max-width:480px}
+    .date{display:inline-flex;gap:10px;align-items:center;border:1px solid #edcd8b40;border-radius:50px;padding:11px 19px;color:var(--gold);font-size:12px;margin-top:28px}
+    .countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;width:100%;max-width:710px;margin:36px 0 20px}.unit{border:1px solid #ffffff1c;border-radius:18px;background:linear-gradient(140deg,#ffffff09,#ffffff02);padding:25px 8px 22px;box-shadow:0 12px 40px #00000010}.number{font-size:clamp(36px,7vw,72px);font-weight:300;font-variant-numeric:tabular-nums;letter-spacing:-.04em;line-height:1.1}.label{display:block;text-transform:uppercase;letter-spacing:.2em;font-size:10px;color:var(--gold);margin-top:12px}
+    .note{font-size:12px;color:var(--muted);margin:0 0 32px}.share{background:var(--gold);border:0;border-radius:50px;padding:16px 25px;color:#172137;font-weight:bold;font-size:13px;cursor:pointer;transition:transform .2s,background .2s}.share:hover{transform:translateY(-2px);background:#f7dca5}.share:focus-visible{outline:3px solid white;outline-offset:5px}
+    .footer{margin:38px 0 0;color:#9caac1;font:italic 15px/1.5 Georgia,serif}.footer span{color:var(--gold)}.timezone{font-size:10px;color:#8896ad;margin-top:16px}#message{max-width:600px;font:normal 24px/1.4 Georgia,serif;color:var(--gold);margin-top:28px}#message:empty{display:none}
+    @media(max-width:480px){main{padding:32px 18px}.eyebrow{font-size:9px;letter-spacing:.22em;margin-bottom:25px}.countdown{gap:8px;margin-top:28px}.unit{border-radius:12px;padding:21px 4px}.label{font-size:8px;letter-spacing:.12em}.sub{font-size:13px}.date{font-size:11px}.footer{margin-top:30px}}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+  </style>
+</head>
+<body>
+  <div class="stars" aria-hidden="true" id="stars"></div>
+  <main>
+    <p class="eyebrow">Família reunida · Réveillon 2027</p>
+    <div class="spark" aria-hidden="true">✦</div>
+    <h1>Vem, <em>2027!</em></h1>
+    <p class="intro">O melhor da virada é estar junto.</p>
+    <p class="sub">Dia 30 a casa será liberada e a família vai se reunir.<br>Falta só…</p>
+    <div class="date"><span aria-hidden="true">✧</span> 30 de dezembro de 2026 <span aria-hidden="true">✧</span></div>
+    <div class="countdown" role="timer" aria-label="Tempo restante para nosso encontro">
+      <div class="unit"><span class="number" id="days">00</span><span class="label">Dias</span></div>
+      <div class="unit"><span class="number" id="hours">00</span><span class="label">Horas</span></div>
+      <div class="unit"><span class="number" id="minutes">00</span><span class="label">Minutos</span></div>
+      <div class="unit"><span class="number" id="seconds">00</span><span class="label">Segundos</span></div>
+    </div>
+    <p id="message" role="status"></p>
+    <p class="note">Até o dia de abraçar todo mundo de novo.</p>
+    <button class="share" id="share" type="button">Compartilhar com a família ↗</button>
+    <p class="footer">Que venham as histórias, as risadas<br>e mais um ano de <span>nós.</span></p>
+    <p class="timezone">Contagem até 30/12/2026, às 00h · Horário de Brasília</p>
+  </main>
+  <script>
+    const TARGET = Date.parse('2026-12-30T00:00:00-03:00');
+    function remaining(now) {
+      const total = Math.max(0, Math.floor((TARGET-now)/1000));
+      return [Math.floor(total/86400),Math.floor(total/3600)%24,Math.floor(total/60)%60,total%60];
+    }
+    function update() {
+      const now = Date.now();
+      remaining(now).forEach((value,i)=>document.getElementById(['days','hours','minutes','seconds'][i]).textContent=String(value).padStart(2,'0'));
+      if(now>=TARGET){
+        document.querySelector('.countdown').style.display='none';
+        document.querySelector('.timezone').style.display='none';
+        document.getElementById('message').textContent='Chegou o dia do nosso encontro! ✨';
+        document.querySelector('.sub').textContent='A espera acabou. É hora de celebrar em família!';
+        document.querySelector('.note').textContent='Feliz encontro. Feliz 2027!';
+      }
+    }
+    update();setInterval(update,1000);
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden)update()});
+    for(let i=0;i<65;i++){
+      const star=document.createElement('i');star.className='star';
+      const size=i%7===0?3:1.5;
+      star.style.cssText=`left:${(i*43.7)%100}%;top:${(i*27.3)%100}%;width:${size}px;height:${size}px;opacity:${.15+(i%5)*.12}`;
+      document.getElementById('stars').appendChild(star);
+    }
+    document.getElementById('share').addEventListener('click',()=>{
+      const url=location.protocol==='file:'?'':location.href.split('#')[0];
+      const text=Date.now()>=TARGET
+        ? `Família, a espera acabou! ✨ Que comece nosso encontro para celebrar a chegada de 2027! ${url}`
+        : `Família, já estamos contando os dias! ✨ Dia 30 de dezembro a casa será liberada e vamos nos reunir para celebrar a chegada de 2027. Vejam a contagem regressiva: ${url}`;
+      window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank','noopener,noreferrer');
+    });
+  </script>
+</body>
+</html>
